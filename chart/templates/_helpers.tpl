@@ -269,7 +269,6 @@ Renders only if .Values.ca_trust_bundle.configmap_name is defined.
 - name: ca-trust-vol
   configMap:
     name: {{ .Values.ca_trust_bundle.configmap_name }}
-    optional: {{ .Values.ca_trust_bundle.optional | default true }}
 {{- end }}
 {{- end }}
 

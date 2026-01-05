@@ -191,6 +191,32 @@ Elasticsearch requires TLS termination in order for it to support Single Sign On
 
 Furthermore, the Kibana interface (specified via `dashboards_url`) is still expected to remain unencrypted when using Istio service mesh.
 
+## <a name="CABundle"></a>CA Bundle Notes
+
+In some cases, you may need to establish CA trust between deployments or DaemonSets within Malcolm (e.g., Zeek pulling events from a corporate MISP instance with a private CA).
+
+To enable this, specify the `ca_trust_bundle` in your `values.yaml`. This will mount the bundle into the container's trust store.
+
+**Configuration Example:**
+```yaml
+ca_trust_bundle:
+  # The name of the ConfigMap containing the CA bundle.
+  # If specified, this ConfigMap MUST exist or the pod will fail to start.
+  configmap_name: trust-bundle
+```
+**Important Requirements**: The ConfigMap must contain a key named `ca-bundle.pem`. You can create this using the following command:
+```bash
+# The key 'ca-bundle.pem' is mandatory for the mount to work
+kubectl create configmap trust-bundle \
+  --from-file=ca-bundle.pem=./path/to/your/custom-ca.crt
+```
+
+**Supported Components**: This configuration is currently supported in:
+* zeek
+* arkime
+* suricata
+* nginx
+
 ## <a name="StorageProvisioner"></a>Storage Provisioner Options
 
 Malcolm-Helm's `chart/values.yaml` file defaults to the Rancher [local-path](https://github.com/rancher/local-path-provisioner) storage provisioner which allocates storage from the Kubernetes nodes' local storage. As stated [above](#ProductionReqs), any storage provider that supports the `ReadWriteMany` access mode may be employed for Malcolm-Helm. This section provides an example of how to configure the [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner) for enviroments with an NFS server available.
