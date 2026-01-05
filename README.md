@@ -203,10 +203,15 @@ ca_trust_bundle:
   # The name of the ConfigMap containing the CA bundle.
   # If specified, this ConfigMap MUST exist or the pod will fail to start.
   configmap_name: trust-bundle
+
+  # Optional: The key inside the ConfigMap containing the certificate data.
+  # Defaults to 'ca-bundle.pem' if omitted.
+  configmap_key: "my-root-ca.crt"
 ```
-**Important Requirements**: The ConfigMap must contain a key named `ca-bundle.pem`. You can create this using the following command:
+**Important Requirements**: The key used in your ConfigMap must match the `configmap_key` value (or the default ca-bundle.pem if you didn't specify one).
 ```bash
-# The key 'ca-bundle.pem' is mandatory for the mount to work
+# If you leave configmap_key blank,
+# your ConfigMap must use the key ca-bundle.pem
 kubectl create configmap trust-bundle \
   --from-file=ca-bundle.pem=./path/to/your/custom-ca.crt
 ```

@@ -279,8 +279,9 @@ Mounts to a generic name 'ca-bundle.pem' to avoid Symlink collisions
 {{- define "malcolm.ca_volume_mount" -}}
 {{- if and .Values.ca_trust_bundle .Values.ca_trust_bundle.configmap_name }}
 - name: ca-trust-vol
-  mountPath: /etc/ssl/certs/ca-bundle.pem
-  subPath: ca-bundle.pem
+  {{- $certName := .Values.ca_trust_bundle.configmap_key | default "ca-bundle.pem" }}
+  mountPath: /etc/ssl/certs/{{ $certName }}
+  subPath: {{ $certName }}
   readOnly: true
 {{- end }}
 {{- end }}
@@ -291,9 +292,10 @@ Points the apps to the new side-loaded file path
 */}}
 {{- define "malcolm.ca_env_var" -}}
 {{- if and .Values.ca_trust_bundle .Values.ca_trust_bundle.configmap_name }}
+  {{- $certName := .Values.ca_trust_bundle.configmap_key | default "ca-bundle.pem" }}
 - name: SSL_CERT_FILE
-  value: /etc/ssl/certs/ca-bundle.pem
+  value: /etc/ssl/certs/{{ $certName }}
 - name: REQUESTS_CA_BUNDLE
-  value: /etc/ssl/certs/ca-bundle.pem
+  value: /etc/ssl/certs/{{ $certName }}
 {{- end }}
 {{- end }}
