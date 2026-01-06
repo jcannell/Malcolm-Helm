@@ -124,7 +124,7 @@ spec:
       volumes:
         - name: var-local-catrust-volume
           configMap:
-            name: var-local-catrust
+            name: {{ .Values.caTrustConfigMapName | default "var-local-catrust" }}
         - name: file-monitor-zeek-volume
           persistentVolumeClaim:
             claimName: zeek-claim

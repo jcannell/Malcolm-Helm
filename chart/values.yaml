@@ -23,6 +23,11 @@ node_count_label:
   key: cnaps.io/node-type
   value: Tier-1
 
+# Configuration for Custom CA Trust
+# If you have an existing ConfigMap (e.g., trust-bundle), specify it here.
+# If left as "var-local-catrust", you must create that ConfigMap manually or via the chart.
+caTrustConfigMapName: "var-local-catrust"
+
 # The StorageClass used for persistent volumes. Defaults to `local-path` (Local Path Provisioner).
 # If your cluster doesn't support this, set `storage_class_name` to another class that supports
 # ReadWriteMany. You can also override it at install time, e.g.:

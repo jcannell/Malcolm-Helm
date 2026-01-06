@@ -91,7 +91,7 @@ spec:
       volumes:
         - name: var-local-catrust-volume
           configMap:
-            name: var-local-catrust
+            name: {{ .Values.caTrustConfigMapName | default "var-local-catrust" }}
         - name: pcap-monitor-opensearch-curlrc-secret-volume
           secret:
             secretName: opensearch-curlrc
